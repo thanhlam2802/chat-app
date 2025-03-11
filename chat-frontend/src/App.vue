@@ -19,10 +19,13 @@ import Content from './views/Content.vue';
 // onMounted(fetchMessage);
 </script>
 
-<template>
+<!-- <template>
   <div class="flex h-screen w-full bg-gray-100">
       <Sidebar />
       <Content />
   </div>
-</template>
+</template> -->
 
+<template>
+      <router-view />
+</template>

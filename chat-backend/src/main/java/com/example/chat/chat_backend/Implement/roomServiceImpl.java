@@ -44,15 +44,15 @@ public class roomServiceImpl implements roomService {
 		return dao.findAll();
 	}
 
-	@Override
-	public List<room> findbyMember(String id) {
-		List<room> returnn = new ArrayList<>() ;
-		for(int i = 0 ; i <this.findAll().size();i ++) {
-			if (this.findAll().get(i).getMembers().get(0).equalsIgnoreCase(id) || this.findAll().get(i).getMembers().get(1).equalsIgnoreCase(id)) {
-				returnn.add(this.findAll().get(i));
-			}
-		}
-		return returnn;
-	}
+//	@Override
+//	public List<room> findbyMember(String id) {
+//		List<room> returnn = new ArrayList<>() ;
+//		for(int i = 0 ; i <this.findAll().size();i ++) {
+//			if (this.findAll().get(i).getMembers().get(0).equalsIgnoreCase(id) || this.findAll().get(i).getMembers().get(1).equalsIgnoreCase(id)) {
+//				returnn.add(this.findAll().get(i));
+//			}
+//		}
+//		return returnn;
+//	}
 
 }
