@@ -2,6 +2,7 @@ package com.example.chat.chat_backend.Bean;
 
 import java.util.Date;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -17,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Document(collection = "tinNhan")
 public class tinNhan {
     @Id
-    private String id;
+    private ObjectId id;
     private String idNguoiGui; 
     private String noiDung;    
     private Date thoiGian;    

@@ -2,6 +2,7 @@ package com.example.chat.chat_backend.Implement;
 
 import java.util.List;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,7 @@ public class tinNhanServiceImpl implements tinNhanService{
 	}
 
 	@Override
-	public void deletetinNhan(String id) {
+	public void deletetinNhan(ObjectId id) {
 		 dao.deleteById(id);
 		
 	}
@@ -31,7 +32,7 @@ public class tinNhanServiceImpl implements tinNhanService{
 	}
 
 	@Override
-	public tinNhan findById(String id) {
+	public tinNhan findById(ObjectId id) {
 		 
 		return dao.findById(id).orElse(null);
 	}
