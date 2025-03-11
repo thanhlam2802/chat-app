@@ -2,6 +2,7 @@ package com.example.chat.chat_backend.Bean;
 
 import java.util.List;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -17,8 +18,8 @@ import lombok.NoArgsConstructor;
 @Document(collection = "room")
 public class room {
     @Id
-    private String id;
-    private List<String> members; 
+    private ObjectId id;
+    private List<ObjectId> members; 
     private boolean type;        
     private String name;   
 }

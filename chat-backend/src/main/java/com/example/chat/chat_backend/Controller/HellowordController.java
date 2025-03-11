@@ -1,37 +1,37 @@
 package com.example.chat.chat_backend.Controller;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.chat.chat_backend.Service.roomService;
+import com.example.chat.chat_backend.Bean.user;
+import com.example.chat.chat_backend.Service.ChatService;
 import com.example.chat.chat_backend.Service.userService;
 
 @RestController
-
+@RequestMapping("/api")
 public class HellowordController {
 	@Autowired userService utilUser;
-	@Autowired roomService room;
-	@RequestMapping("/api")
+	@Autowired
+    private ChatService chatService;
+    @GetMapping("/hello")
     public String hello() {
     	utilUser.findAll().forEach(u ->{
-    		System.out.println(u);
+    		System.out.println(u.getId());
     	});
-//		room.findAll().forEach(r ->{
-//			System.out.println(r.getId() + "id room");
-//			r.getMembers().forEach( m ->{
-//				System.out.println(m);
-//			});
-//		});
-		System.out.println("sssssssssssssssssssssssssssssssssssssssssssss");
-		System.out.println(room.findbyMember("67ca664cdba853068a93a5df").size());
-		room.findbyMember("67ca664cdba853068a93a5df").forEach(r ->{
-			System.out.println(r.getId()+"id room");
-			r.getMembers().forEach(m ->{
-				System.out.println(m);
-			});
-		});
+
+    	ObjectId userId = new ObjectId("67ca664cdba853068a93a5df");
+    	System.out.print((chatService.getUsersWithLatestMessage(userId)));
+    	
         return "chafooo màyyyyyyyyy!";
     }
+    
+  
+   
 }
