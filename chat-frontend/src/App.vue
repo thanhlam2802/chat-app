@@ -25,3 +25,4 @@ import Content from './views/Content.vue';
       <Content />
   </div>
 </template>
+
