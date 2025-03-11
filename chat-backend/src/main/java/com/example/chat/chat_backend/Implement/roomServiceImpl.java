@@ -1,5 +1,6 @@
 package com.example.chat.chat_backend.Implement;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,17 @@ public class roomServiceImpl implements roomService {
 	public List<room> findAll() {
 		 
 		return dao.findAll();
+	}
+
+	@Override
+	public List<room> findbyMember(String id) {
+		List<room> returnn = new ArrayList<>() ;
+		for(int i = 0 ; i <this.findAll().size();i ++) {
+			if (this.findAll().get(i).getMembers().get(0).equalsIgnoreCase(id) || this.findAll().get(i).getMembers().get(1).equalsIgnoreCase(id)) {
+				returnn.add(this.findAll().get(i));
+			}
+		}
+		return returnn;
 	}
 
 }
