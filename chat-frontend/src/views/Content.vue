@@ -1,13 +1,14 @@
-<script setup></script>
+<script setup>
+import avt  from '../components/Avt.vue';
+import { ref } from 'vue';
+import axios from 'axios';
+import { onMounted } from 'vue';
+
+
+</script>
 <template>
   <div class="w-[80%] p-4 border-b border-gray-200">
-    <img
-      alt="Profile picture of Phan Thịnh"
-      class="rounded-full w-10 h-10"
-      height="40"
-      src="https://storage.googleapis.com/a1aa/image/TN8ftwySmFyfEvSI8g7pcTAwsP8A2UDjGSd4hDreaWQ.jpg"
-      width="40"
-    />
+   <avt/>
     <div class="ml-3">
       <div class="font-semibold">Phan Thịnh</div>
       <div class="text-sm text-gray-500">Đang hoạt động</div>
