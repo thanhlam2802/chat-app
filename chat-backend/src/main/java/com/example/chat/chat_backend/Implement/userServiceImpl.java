@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.chat.chat_backend.Bean.user;
 import com.example.chat.chat_backend.DAO.userDAO;
+import com.example.chat.chat_backend.DTO.LoginDTO;
 import com.example.chat.chat_backend.Service.userService;
 
 @Service
@@ -40,6 +41,17 @@ public class userServiceImpl implements userService {
 	public List<user> findAll() {
 		 
 		return dao.findAll();
+	}
+
+	@Override
+	public Boolean checkLogin(LoginDTO lg) {
+		// TODO Auto-generated method stub
+		return dao.findByNameAndPass(lg.getUserName(),lg.getPassword()) != null ? true : false;
+	}
+
+	@Override
+	public user findByName(String name) {
+		return dao.findByName(name);
 	}
 
 }

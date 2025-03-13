@@ -7,5 +7,6 @@ import com.example.chat.chat_backend.Bean.user;
 
 public interface userDAO  extends MongoRepository<user,ObjectId>{
 
-	
+	user findByNameAndPass(String name, String pass);
+	user findByName(String name);
 }

@@ -22,6 +22,7 @@
                 về sở thích của mình.
             </p>
             <div class="w-full max-w-sm p-6">
+                <p class="text-xs my-4 text-red-500">{{ errors }}</p>
                 <form @submit.prevent="login">
                     <div class="mb-4">
                         <input type="text" name="userName" placeholder="Email hoặc số điện thoại"
@@ -78,24 +79,43 @@
     </footer>
 </template>
 <script setup>
-    import { ref } from 'vue'
+    import { ref,watch } from 'vue'
     import { useRouter } from 'vue-router';
-
+    const errors = ref();
     const router = useRouter();
+
+    const props = defineProps({
+    user: Object,
+    });
+    watch(() =>props.user, function (newUser) {
+    if (newUser) {
+        console.log("đã có push de");
+        
+        router.push('/chat');
+    }
+    }, { immediate: true });
     const login = (event) => {
         const formData = new FormData(event.target);
         const jsonData = Object.fromEntries(formData.entries());
-        console.log(jsonData);
         fetch('http://localhost:8080/api/login',
          {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(jsonData)
+            body: JSON.stringify(jsonData),
+            credentials: 'include'
         })
             .then(res => res.json())
-            .then(data => console.log(data))
+            .then(data =>{
+                if (data) {
+                    window.location.href = 'http://localhost:5173/chat';
+                    router.push('/chat');
+                } else {
+                    errors.value= "*Sai ở đâu rồi cha nậu quơ" ;
+                    console.error('lỗi mẹ r ní ơi: ', data);
+                }
+            })
             .catch(err => console.error('Error:', err));
 
 
