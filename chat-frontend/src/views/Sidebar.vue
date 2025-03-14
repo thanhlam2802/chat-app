@@ -29,6 +29,9 @@ const fetchUsers = async (userId) => {
     const response = await axios.get(`http://localhost:8080/api/friends/${userId}`);
     users.value = response.data;
     console.log("33333Danh sách bạn bè:", users.value);
+
+    console.log("Danh sách bạn bè:", users.value);
+
   } catch (error) {
     console.error("Lỗi khi lấy danh sách bạn bè:", error);
   }
