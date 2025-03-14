@@ -15,7 +15,7 @@ import com.example.chat.chat_backend.Bean.room;
 
 public interface roomDAO extends MongoRepository<room,ObjectId>{
 
-	@Query("{ 'members': { $in: [?0] }, 'type': false }")
+	@Query("{ 'members': { $in: [?0] } }")
 	List<room> findByMembersContainingAndTypeIsFalse(ObjectId userId);
 
 
