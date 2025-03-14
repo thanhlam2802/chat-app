@@ -110,7 +110,7 @@
             .then(data =>{
                 if (data) {
                     window.location.href = 'http://localhost:5173/chat';
-                    router.push('/chat');
+                    // router.push('/chat');
                 } else {
                     errors.value= "*Sai ở đâu rồi cha nậu quơ" ;
                     console.error('lỗi mẹ r ní ơi: ', data);

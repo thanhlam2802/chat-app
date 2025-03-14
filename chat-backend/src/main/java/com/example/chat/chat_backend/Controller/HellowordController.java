@@ -1,8 +1,9 @@
 package com.example.chat.chat_backend.Controller;
 
-import org.bson.types.ObjectId;
+import java.util.Base64;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +17,6 @@ import com.example.chat.chat_backend.DTO.LoginDTO;
 import com.example.chat.chat_backend.Service.ChatService;
 import com.example.chat.chat_backend.Service.SessionService;
 import com.example.chat.chat_backend.Service.userService;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
@@ -32,23 +32,38 @@ public class HellowordController {
     @GetMapping("/hello")
     public String hello() {
     	
-    	utilUser.findAll().forEach(u ->{
-    		System.out.println(u.getId());
-    	});
-
-    	ObjectId userId = new ObjectId("67ca664cdba853068a93a5df");
-    	System.out.print((chatService.getUsersWithLatestMessage(userId)));
+//    	utilUser.findAll().forEach(u ->{
+//    		System.out.println(u.getId());
+//    	});
+//
+//    	ObjectId userId = new ObjectId("67ca664cdba853068a93a5df");
+//    	System.out.print((chatService.getUsersWithLatestMessage(userId)));
+//    	
+    	String pas= "1561ef5792UDN6lHe";
+//    	String random = UUID.randomUUID().toString().replace("-", "").substring(0, 9);
+//    	String base =new StringBuilder(Base64.getEncoder().encodeToString(pas.getBytes())+random).reverse().toString();
     	
+    	String endb=new String(Base64.getDecoder().decode(new StringBuilder(pas.substring(9, pas.length())).reverse().toString()));
+//    	String bas2 =Base64.getEncoder().encodeToString(pas.getBytes());
+//    	String endb2= new String(Base64.getDecoder().decode(bas2));
+//    	System.out.println("mã hóa kiểu khang: "+base);
+//    	
+//    	System.out.println("mã hóa thường: "+bas2);
+    	System.out.println("đọc kiểu khang: "+endb);
+//    	System.out.println("đọc kiểu thường: "+endb2);
         return "chafooo màyyyyyyyyy!";
+        
     }
     
     @PostMapping("/login")
-    public ResponseEntity<user> dangnhap(@RequestBody LoginDTO u) {
+    public ResponseEntity<Boolean> dangnhap(@RequestBody LoginDTO u) {
     	
     	if (utilUser.checkLogin(u)) {
+    		System.out.println("có đẩy lên ses");
     		ses.set("userLog", utilUser.findByName(u.getUserName()));
+    		System.out.println("đọc ngay sau khi đẩy: "+ses.get("userLog"));
     	}
-        return ResponseEntity.ok(utilUser.findByName(u.getUserName()));
+        return ResponseEntity.ok(utilUser.checkLogin(u)); 
     }
     
     @GetMapping("/info-user")

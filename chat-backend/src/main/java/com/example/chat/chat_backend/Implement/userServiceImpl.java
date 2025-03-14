@@ -1,5 +1,6 @@
 package com.example.chat.chat_backend.Implement;
 
+import java.util.Base64;
 import java.util.List;
 
 import org.bson.types.ObjectId;
@@ -45,8 +46,14 @@ public class userServiceImpl implements userService {
 
 	@Override
 	public Boolean checkLogin(LoginDTO lg) {
-		// TODO Auto-generated method stub
-		return dao.findByNameAndPass(lg.getUserName(),lg.getPassword()) != null ? true : false;
+		user ud = dao.findByName(lg.getUserName());
+		if (ud != null) {
+			String endb=new String(Base64.getDecoder().decode(new StringBuilder(ud.getPass().substring(9, ud.getPass().length())).reverse().toString()));
+			
+			return lg.getPassword().equals(endb) ? true : false;
+		}
+		return false;
+		
 	}
 
 	@Override
