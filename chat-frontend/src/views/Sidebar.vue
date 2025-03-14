@@ -28,7 +28,10 @@ const fetchUsers = async (userId) => {
     }
     const response = await axios.get(`http://localhost:8080/api/friends/${userId}`);
     users.value = response.data;
+    console.log("33333Danh sách bạn bè:", users.value);
+
     console.log("Danh sách bạn bè:", users.value);
+
   } catch (error) {
     console.error("Lỗi khi lấy danh sách bạn bè:", error);
   }
@@ -97,8 +100,7 @@ onMounted(() => {
             <img v-if="img" class="w-full" :src="img" alt="Avatar" />
           </div>
 
-          <a  @click.prevent="logout"
-            class="w-12 mb-3 block h-12 flex items-center justify-center border-2 border-gray-600 rounded-full hover:bg-red-500 hover:text-white transition"
+          <a  @click.prevent="logout" class="w-12 mb-3 block h-12 flex items-center justify-center border-2 border-gray-600 rounded-full hover:bg-red-500 hover:text-white transition"
           >
             <i class="fa-solid fa-right-from-bracket"></i>
           </a>
@@ -122,13 +124,16 @@ onMounted(() => {
       </div>
       <!-- Chat List -->
       <div class="space-y-4">
-        <ItemUser v-for="userData in users"
-      :key="userData.user.id.date"
-      :avatar="userData.user.avt"
-      :name="userData.user.name"
-      :time="new Date(userData.latestMessage.thoiGian).toLocaleString('vi-VN')"
-      :message="userData.latestMessage.noiDung"
-      ></ItemUser>
+        <ItemUser
+        v-for="userData in users"
+        :key="userData?.user?.id"
+        :avatar="userData?.user?.type === undefined ? '/images/'+userData?.user?.avt : '/images/group.png'"
+        :name="userData?.user?.name"
+        :time="userData?.latestMessage?.thoiGian ? new Date(userData?.latestMessage?.thoiGian).toLocaleString('vi-VN') : 'Không có thời gian'"
+        :message="userData?.latestMessage?.noiDung || 'Không có tin nhắn'"
+        :size="userData?.user?.type !== undefined ? userData?.user?.members?.length : null"
+      />
+
     </div>
   </div>
   </div>
