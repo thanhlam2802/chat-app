@@ -1,5 +1,6 @@
 package com.example.chat.chat_backend.Implement;
 
+import java.util.Base64;
 import java.util.List;
 
 import org.bson.types.ObjectId;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.chat.chat_backend.Bean.user;
 import com.example.chat.chat_backend.DAO.userDAO;
+import com.example.chat.chat_backend.DTO.LoginDTO;
 import com.example.chat.chat_backend.Service.userService;
 
 @Service
@@ -40,6 +42,23 @@ public class userServiceImpl implements userService {
 	public List<user> findAll() {
 		 
 		return dao.findAll();
+	}
+
+	@Override
+	public Boolean checkLogin(LoginDTO lg) {
+		user ud = dao.findByName(lg.getUserName());
+		if (ud != null) {
+			String endb=new String(Base64.getDecoder().decode(new StringBuilder(ud.getPass().substring(9, ud.getPass().length())).reverse().toString()));
+			
+			return lg.getPassword().equals(endb) ? true : false;
+		}
+		return false;
+		
+	}
+
+	@Override
+	public user findByName(String name) {
+		return dao.findByName(name);
 	}
 
 }

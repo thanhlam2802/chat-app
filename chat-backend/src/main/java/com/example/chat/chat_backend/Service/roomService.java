@@ -12,4 +12,5 @@ public interface roomService {
 	room updateRoom(room r);
 	room findById(ObjectId id);
 	List<room> findAll();
+//	List <room> findbyMember(String id);
 }
