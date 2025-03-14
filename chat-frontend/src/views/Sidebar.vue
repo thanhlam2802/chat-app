@@ -1,5 +1,21 @@
 <script setup>
-import ItemUser from '../components/ItemUser.vue'
+import ItemUser from '../components/ItemUser.vue';
+import { ref } from 'vue';
+import axios from 'axios';
+import { onMounted } from 'vue';
+const users = ref([]);
+const fetchchUsers = async () =>{
+  try {
+    const userId = "67ca664cdba853068a93a5df";
+    const response = await axios.get(`http://localhost:8080/api/friends/${userId}`);
+    users.value = response.data;
+    } catch (error) {
+      console.error(error);
+      }
+
+}
+onMounted(fetchchUsers);
+
 </script>
 
 <template>
@@ -62,10 +78,15 @@ import ItemUser from '../components/ItemUser.vue'
       </div>
       <!-- Chat List -->
       <div class="space-y-4">
-        <ItemUser></ItemUser>
-        <ItemUser></ItemUser>
-      </div>
+        <ItemUser v-for="userData in users"
+      :key="userData.user.id.date"
+      :avatar="userData.user.avt"
+      :name="userData.user.name"
+      :time="new Date(userData.latestMessage.thoiGian).toLocaleString('vi-VN')"
+      :message="userData.latestMessage.noiDung"
+      ></ItemUser>
     </div>
+  </div>
   </div>
   
 </template>
