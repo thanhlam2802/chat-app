@@ -1,50 +1,55 @@
 <script setup>
+import { ref, watch, onMounted } from 'vue';
+import axios from 'axios';
 import ItemUser from '../components/ItemUser.vue';
-
-import { ref, watch } from 'vue';
 
 const props = defineProps({
   user: Object,
 });
 
 const img = ref('');
-watch(() =>props.user, function (newUser) {
-  console.log("watch"+props.user);
-  
-  if (newUser) {
-    img.value = '/images/' + newUser.avt;
+const users = ref([]);
 
+watch(() => props.user, async (newUser) => {
+  console.log("User mới:", newUser);
+  if (newUser && newUser.avt) {
+    img.value = '/images/' + newUser.avt;
+  }
+  if (newUser && newUser.id) {
+    await fetchUsers(newUser.id);
   }
 }, { immediate: true });
 
-import axios from 'axios';
-import { onMounted } from 'vue';
-const users = ref([]);
-const fetchchUsers = async () =>{
+const fetchUsers = async (userId) => {
   try {
-    const userId = "67ca664cdba853068a93a5df";
+    if (!userId) {
+      console.error("User ID không tồn tại!");
+      return;
+    }
     const response = await axios.get(`http://localhost:8080/api/friends/${userId}`);
     users.value = response.data;
-    } catch (error) {
-      console.error(error);
-      }
+    console.log("Danh sách bạn bè:", users.value);
+  } catch (error) {
+    console.error("Lỗi khi lấy danh sách bạn bè:", error);
+  }
+};
 
-}
-onMounted(fetchchUsers);
-
-</script>
-
-const logout = ()=>{
-  console.log("chạy log out");
-  
+const logout = () => {
+  console.log("Chạy logout");
   fetch('http://localhost:8080/api/logout', {
-      method: 'GET',
-      credentials: 'include',
-    });
-    window.location.href = 'http://localhost:5173';
-}
+    method: 'GET',
+    credentials: 'include',
+  });
+  window.location.href = 'http://localhost:5173';
+};
 
+onMounted(() => {
+  if (props.user?.id) {
+    fetchUsers(props.user.id);
+  }
+});
 </script>
+
 <template>
   <div class="flex  h-screen">
     <!-- Sidebar -->
