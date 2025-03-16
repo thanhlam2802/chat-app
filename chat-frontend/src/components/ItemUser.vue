@@ -18,11 +18,12 @@ console.log("ooooooooooooooooo"+props.avatar);
     <div class="flex-1">
       <div class="flex justify-between">
         <div>
-          <span class="font-bold mr-3">{{ name || 'Nguyen Minh Phuong' }}</span>
+          <span class="font-bold  mr-3">{{ name || 'Nguyen Minh Phuong' }}</span>
         </div>
-        <span class="text-gray-500 text-sm">{{ time || '31 tuần' }}</span>
+        <span class="text-gray-500 text-sm">  {{ new Date(time).toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit", hour12: false }) }}
+</span>
       </div>
-      <p class="text-gray-500 truncate">{{ message || 'Nếu bạn k lấy nhá...' }}</p>
+      <p class="text-gray-500 truncate">{{ message.substring(0,25)+'...' || 'Nếu bạn k lấy nhá...' }}</p>
     </div>
     <i class="fas fa-ellipsis-h text-gray-500"></i>
     <span v-if="size" class="bottom-2 left-6 rounded-full text-center bg-white border-2 border-gray-300 w-[20px] h-[20px] absolute text-red-500 text-sm font-semibold">{{ size }}</span>
