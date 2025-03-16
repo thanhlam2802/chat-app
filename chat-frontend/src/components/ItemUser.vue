@@ -6,14 +6,14 @@ const props = defineProps({
   name: String,
   time: String,
   message: String,
-  size: Number 
+  size: Number ,
 });
 console.log("ooooooooooooooooo"+props.avatar);
 
 </script>
 
 <template>
-  <div class="flex relative items-center space-x-4 p-2 hover:bg-gray-100 rounded-lg cursor-pointer">
+    <div class="flex relative items-center space-x-4 p-2 hover:bg-gray-100 rounded-lg cursor-pointer">
     <Avatar :src="avatar" size="md" />
     <div class="flex-1">
       <div class="flex justify-between">

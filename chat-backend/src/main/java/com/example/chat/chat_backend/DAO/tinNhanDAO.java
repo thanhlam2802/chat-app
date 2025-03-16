@@ -13,4 +13,8 @@ public interface tinNhanDAO  extends MongoRepository<tinNhan, ObjectId>{
 	
 
     List<tinNhan> findByIdRoom(ObjectId idRoom, Pageable pageable);
+    
+    @Query(value = "{ 'idRoom': ?0 }", sort = "{ 'thoiGian': -1 }")
+    List<tinNhan> findByIdRoomOrderByThoiGianDesc(ObjectId idRoom);
+    
 }

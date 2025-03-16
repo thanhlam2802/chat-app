@@ -1,16 +1,29 @@
 <script setup>
-import avt  from '../components/Avt.vue';
+import AVT  from '../components/Avt.vue';
+import MessageItem from "../components/MessageItem.vue"; 
+import Banner from "../components/Banner.vue"
+import { nextTick } from 'vue';
 import { ref } from 'vue';
 import axios from 'axios';
 import { onMounted } from 'vue';
+defineProps({
+  messages: Array,
+  nameroom: String,
+  avt: String,
+  isClick: Boolean,
+  user: Object,
+
+});
 
 
 </script>
-<template>
-  <div class="w-[80%] p-4 border-b border-gray-200">
-   <avt/>
+<template >
+  
+  <div  v-if="isClick" class="w-[80%]  p-4 border-b border-gray-200">
+   <div class="flex justify-between">
+    <AVT :src="avt" size="md"/>
     <div class="ml-3">
-      <div class="font-semibold">Phan Thịnh</div>
+      <div class="font-semibold">{{nameroom}}</div>
       <div class="text-sm text-gray-500">Đang hoạt động</div>
     </div>
     <div class="ml-auto flex items-center space-x-4">
@@ -18,26 +31,29 @@ import { onMounted } from 'vue';
       <i class="fas fa-video text-purple-600 text-xl"> </i>
       <i class="fas fa-info-circle text-purple-600 text-xl"> </i>
     </div>
+    </div>
     <!-- Main Content -->
-    <div class="h-[75%] flex flex-col items-center justify-center flex-grow overflow-scroll snap-y">
-      <img
-        alt="Profile picture of Phan Thịnh"
-        class="rounded-full w-24 h-24"
-        height="100"
-        src="https://storage.googleapis.com/a1aa/image/TN8ftwySmFyfEvSI8g7pcTAwsP8A2UDjGSd4hDreaWQ.jpg"
-        width="100"
-      />
+    <div v-if="messages.length === 0" class="h-[85%] flex flex-col items-center  justify-center flex-grow overflow-scroll snap-y">
+      <AVT :src="avt" size="xl"/>
       <!-- noi dung tin nhan -->
       <div class="mt-4 text-center">
-        <div class="font-semibold text-lg">Phan Thịnh</div>
+        <div class="font-semibold text-lg">{{ nameroom }}</div>
         <div class="text-gray-500">Các bạn là bạn bè trên Facebook</div>
         <div class="text-gray-500">Sống tại Bạc Liêu (thành phố)</div>
       </div>
       
     </div>
+    <div v-else class="h-[85%] flex flex-col  flex-grow overflow-scroll snap-y">
+      <MessageItem
+      v-for="(message, index) in messages"
+      :key="index"
+      :message="message"
+      :isCurrentUser="message.idNguoiGui === user.id"
+      />
+    </div>
     <!-- Footer -->
     <form>
-      <div class="flex  p-4 border-t border-gray-200 ">
+      <div class="flex p-4 border-t border-gray-200 ">
         <i class="fas fa-plus-circle text-blue-600 text-2xl"> </i>
         <i class="fas fa-image text-blue-600 text-2xl ml-4"> </i>
         <i class="fas fa-sticky-note text-blue-600 text-2xl ml-4"> </i>
@@ -53,4 +69,10 @@ import { onMounted } from 'vue';
       </div>
     </form>
   </div>
+  <div  v-else class="w-[80%] p-1 ">
+    <Banner/>
+  </div>
+
+
 </template>
+

@@ -99,6 +99,7 @@ public class HellowordController {
         	System.out.println("lkieems ban be ");
             ObjectId objectId = new ObjectId(userId);
             List<Map<String, Object>> friends = chatService.getUsersWithLatestMessage(objectId);
+        	System.out.println(friends);
              friends.forEach(m ->{
             	System.out.println("-------------------------");
             	System.out.println(m.get("user"));

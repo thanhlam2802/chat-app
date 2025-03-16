@@ -1,14 +1,21 @@
 <script setup>
-import { ref, watch, onMounted } from 'vue';
-import axios from 'axios';
-import ItemUser from '../components/ItemUser.vue';
+import { ref, watch, onMounted } from "vue";
+import axios from "axios";
+import ItemUser from "../components/ItemUser.vue";
 
 const props = defineProps({
   user: Object,
 });
 
-const img = ref('');
+const emit = defineEmits(["clickStatus", "messagesFetched"]);
+const messages = ref([]);
+const img = ref("");
 const users = ref([]);
+const isClick = ref(false);
+const activeIndex = ref(null);
+
+
+
 
 watch(() => props.user, async (newUser) => {
   console.log("User mới:", newUser);
@@ -28,23 +35,58 @@ const fetchUsers = async (userId) => {
     }
     const response = await axios.get(`http://localhost:8080/api/friends/${userId}`);
     users.value = response.data;
-    console.log("33333Danh sách bạn bè:", users.value);
-
     console.log("Danh sách bạn bè:", users.value);
-
   } catch (error) {
     console.error("Lỗi khi lấy danh sách bạn bè:", error);
   }
 };
 
+const fetchMessages = (roomId, userInfor,isClick) => {
+  if (!roomId) {
+    console.warn("Room ID không tồn tại!");
+    return;
+  }
+
+  fetch(`http://localhost:8080/api/messages/${roomId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Lỗi HTTP! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log("Danh sách tin nhắn nhận được:", data);
+      messages.value = data;
+
+      emit("messagesFetched", {
+        messages: messages.value,
+        nameroom: userInfor.name,
+        avt: userInfor.avt,
+        isClick: true
+      });
+     
+
+    emit("clickStatus", true); 
+     })
+    .catch((error) => {
+      console.error("Lỗi khi lấy tin nhắn:", error);
+    });
+};
+
 const logout = () => {
   console.log("Chạy logout");
-  fetch('http://localhost:8080/api/logout', {
-    method: 'GET',
-    credentials: 'include',
+  fetch("http://localhost:8080/api/logout", {
+    method: "GET",
+    credentials: "include",
   });
-  window.location.href = 'http://localhost:5173';
+  window.location.href = "http://localhost:5173";
 };
+
 
 onMounted(() => {
   if (props.user?.id) {
@@ -54,9 +96,13 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex  h-screen">
+  <div class="flex h-screen pt-1">
     <!-- Sidebar -->
-    <form action="#" method="POST" class="flex flex-col items-center justify-between">
+    <form
+      action="#"
+      method="POST"
+      class="flex flex-col items-center justify-between"
+    >
       <div class="w-16 flex flex-col items-center py-4 space-y-1">
         <button
           type="submit"
@@ -93,18 +139,21 @@ onMounted(() => {
         >
           <i class="fas fa-trash-alt text-xl text-gray-600"></i>
         </button>
-        
       </div>
       <div class="">
-          <div class="w-12 overflow-hidden h-12 flex items-center my-3 justify-center rounded-full hover:bg-red-500 hover:text-white transition">
-            <img v-if="img" class="w-full" :src="img" alt="Avatar" />
-          </div>
-
-          <a  @click.prevent="logout" class="w-12 mb-3 block h-12 flex items-center justify-center border-2 border-gray-600 rounded-full hover:bg-red-500 hover:text-white transition"
-          >
-            <i class="fa-solid fa-right-from-bracket"></i>
-          </a>
+        <div
+          class="w-12 overflow-hidden h-12 flex items-center my-3 justify-center rounded-full hover:bg-red-500 hover:text-white transition"
+        >
+          <img v-if="img" class="w-full" :src="img" alt="Avatar" />
         </div>
+
+        <a
+          @click.prevent="logout"
+          class="w-12 mb-3 block h-12 flex items-center justify-center border-2 border-gray-600 rounded-full hover:bg-red-500 hover:text-white transition"
+        >
+          <i class="fa-solid fa-right-from-bracket"></i>
+        </a>
+      </div>
     </form>
     <!-- Main Content -->
     <div class="flex-1 bg-white p-4">
@@ -125,17 +174,34 @@ onMounted(() => {
       <!-- Chat List -->
       <div class="space-y-4">
         <ItemUser
-        v-for="userData in users"
-        :key="userData?.user?.id"
-        :avatar="userData?.user?.type === undefined ? '/images/'+userData?.user?.avt : '/images/group.png'"
-        :name="userData?.user?.name"
-        :time="userData?.latestMessage?.thoiGian ? new Date(userData?.latestMessage?.thoiGian).toLocaleString('vi-VN') : 'Không có thời gian'"
-        :message="userData?.latestMessage?.noiDung || 'Không có tin nhắn'"
-        :size="userData?.user?.type !== undefined ? userData?.user?.members?.length : null"
-      />
-
+          v-for="(userData,index) in users"
+          :key="userData?.user?.id"
+          :avatar="userData?.user?.type === undefined ? '/images/' + userData?.user?.avt : '/images/group.png'"
+          :name="userData?.user?.name"
+          :time=" userData?.latestMessage?.thoiGian ? new Date(userData?.latestMessage?.thoiGian).toLocaleString('vi-VN'): 'Không có thời gian' "
+          :message="userData?.latestMessage?.noiDung || 'Không có tin nhắn'"
+          :size="userData?.user?.type !== undefined  ? userData?.user?.members?.length: null"
+          :class="{'active-item': index === activeIndex}"
+          @click="() => {
+            activeIndex = index;  
+            if (userData?.latestMessage?.idRoom) {
+              fetchMessages(userData.latestMessage.idRoom, { 
+                name: userData?.user?.name, 
+                avt: userData?.user?.type === undefined ? '/images/' + userData?.user?.avt : '/images/group.png',
+                isClick: true
+              });
+            } else {
+              console.warn('Không thể tải tin nhắn do thiếu idRoom');
+            }
+          }"
+        />
+      </div>
     </div>
   </div>
-  </div>
-  
 </template>
+<style scoped>
+.active-item {
+  background-color: #f0f0f0; 
+}
+
+</style>
