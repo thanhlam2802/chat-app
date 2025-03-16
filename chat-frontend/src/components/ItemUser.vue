@@ -22,7 +22,7 @@ console.log("ooooooooooooooooo"+props.avatar);
         </div>
         <span class="text-gray-500 text-sm">{{ time || '31 tuần' }}</span>
       </div>
-      <p class="text-gray-500 truncate">{{ message || 'Nếu bạn k lấy nhá...' }}</p>
+      <p class="text-gray-500 truncate">{{ message.substring(0,25)+'...' || 'Nếu bạn k lấy nhá...' }}</p>
     </div>
     <i class="fas fa-ellipsis-h text-gray-500"></i>
     <span v-if="size" class="bottom-2 left-6 rounded-full text-center bg-white border-2 border-gray-300 w-[20px] h-[20px] absolute text-red-500 text-sm font-semibold">{{ size }}</span>
