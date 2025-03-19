@@ -37,7 +37,7 @@ public class tinNhanServiceImpl implements tinNhanService{
             Aggregation.project("idRoom", "thoiGian", "noiDung", "idNguoiGui", "file")
                 .and("nguoiGuiInfo.name").as("tenNguoiGui")
                 .and("nguoiGuiInfo.avt").as("avtNguoiGui"),
-            Aggregation.sort(Sort.by(Sort.Direction.DESC, "thoiGian")) 
+            Aggregation.sort(Sort.by(Sort.Direction.ASC, "thoiGian")) 
         );
 
         List<TinNhanDTO> messages = mongoTemplate.aggregate(aggregation, "tinNhan", TinNhanDTO.class)
