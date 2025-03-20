@@ -29,7 +29,7 @@ public class ChatServicrImpl implements ChatService{
 
 	    @Autowired
 	    private tinNhanDAO tinNhanRepository;
-
+	    @Autowired userServiceImpl usImpl;
 	    @Autowired
 	    private userDAO userRepository;
 	    @Override
@@ -99,4 +99,38 @@ public class ChatServicrImpl implements ChatService{
 	        log.info("📦 Trả về {} user có tin nhắn", result.size());
 	        return result;
 	    }
+		@Override
+		public List<Map<String, Object>> ListFriend(ObjectId userId) {
+			List<room> rooms = roomRepository.findByMembersContainingAndTypeIsFalse(userId);
+			List<Map<String, Object>> result = new ArrayList<>();
+			 for (room r : rooms) {
+		            if (r.getMembers().size() <= 1) {
+		                continue;
+		            }else if (r.getMembers().size() <=2) {
+		            	ObjectId otherUserId = r.getMembers().stream()
+	     	                .filter(id -> !id.equals(userId))
+	     	                .findFirst()
+	     	                .orElse(null);
+
+	     	            if (otherUserId == null) {
+	     	                log.warn("⚠ Không tìm thấy user còn lại trong phòng!");
+	     	                continue;
+	     	            }
+	     	            user OtherUser = userRepository.findById(otherUserId).orElse(null);
+
+	     	            if (OtherUser != null) {
+	     	                Map<String, Object> data = new HashMap<>();
+	     	                data.put("user", OtherUser);
+	     	                data.put("mutualFr",usImpl.getBanChung(userId, otherUserId));
+
+	     	                result.add(data);
+	     	            } else {
+	     	                log.warn("⚠ Không tìm thấy thông tin user từ database!");
+	     	            }
+		            }else  if (r.getMembers().size() >2){
+	     	           continue;
+		            }
+		        }
+		        return result;
+		}
 }

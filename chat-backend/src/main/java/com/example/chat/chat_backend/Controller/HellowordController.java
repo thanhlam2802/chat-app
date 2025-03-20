@@ -59,7 +59,10 @@ public class HellowordController {
 //    	System.out.println("mã hóa kiểu khang: "+base);
 //    	System.out.println("mã hóa thường: "+bas2);
 //    	System.out.println("đọc kiểu thường: "+endb2);
-    	
+    	utilroom.findAll().forEach(r ->{
+    		System.out.println("id: "+r.getId());
+    		System.out.println("name: "+r.getName());
+    	});
     	
     	
         return "chafooo màyyyyyyyyy!";
@@ -113,7 +116,38 @@ public class HellowordController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Lỗi khi tìm bạn bè");
         }
     }
-  
+    @GetMapping("/listfriends/{userId}")
+    public ResponseEntity<?> getListFr(@PathVariable String userId) {
+        try {
+        	System.out.println("lkieems ban beeeeeeeeeeeeee ");
+            ObjectId objectId = new ObjectId(userId);
+            List<Map<String, Object>> friends = chatService.ListFriend(objectId);
+             friends.forEach(m ->{
+            	System.out.println("-------------------------");
+            	System.out.println(m.get("user"));
+            	System.out.println(m.get("latestMessage"));
+            	System.out.println("-------------------------");
+            });
+            return ResponseEntity.ok(friends);
+        } catch (Exception e) {
+        	System.out.println(e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Lỗi khi tìm bạn bè: ");
+        }
+    }
+    @GetMapping("/listNotFriends/{userId}")
+    public ResponseEntity<?> getListNotFr(@PathVariable String userId) {
+    	System.out.println("lấy ko bạn bèeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+        try {
+            ObjectId objectId = new ObjectId(userId);
+            System.out.println(userId);
+            List<user> notfriends = utilUser.findOut(objectId);
+            
+            return ResponseEntity.ok(notfriends);
+        } catch (Exception e) {
+        	System.out.println(e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Lỗi khi tìm bạn bè: ");
+        }
+    }
 
    
 }	

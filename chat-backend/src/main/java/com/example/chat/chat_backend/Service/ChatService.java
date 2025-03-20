@@ -7,4 +7,5 @@ import org.bson.types.ObjectId;
 
 public interface ChatService {
 	List<Map<String, Object>> getUsersWithLatestMessage(ObjectId userId);
-}
+	List<Map<String,Object>> ListFriend(ObjectId userId);
+ }

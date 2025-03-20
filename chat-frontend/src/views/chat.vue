@@ -51,8 +51,8 @@
         </a>
       </div>
     </div>
-    <component :is="SidebarCPN" :user="user"></component>
-    <component :is="ContentCPN"></component>
+    <component :is="SidebarCPN" :user="user" @updateContent="updateContent"></component>
+    <component  :is="ContentCPN" :user="user" ></component>
   </div>
 </template>
 
@@ -62,11 +62,13 @@ import Sidebar from "../views/Sidebar.vue";
 import Content from "../views/Content.vue";
 import controlFriend from "../components/controlFriend.vue";
 import viewFriend from "../components/viewFriend.vue";
+import viewNotFriend from "../components/viewNotFriend.vue";
 export default {
   components: {
     Sidebar,
     Content,
     viewFriend,
+    viewNotFriend,
     controlFriend,
   },
   props: {
@@ -99,6 +101,11 @@ export default {
       });
       window.location.href = "http://localhost:5173";
     },
+    updateContent(newContent) {
+      console.log("nhận đc yêu cầu chuyển");
+      
+      this.ContentCPN = newContent;
+    }
   },
 };
 </script>
