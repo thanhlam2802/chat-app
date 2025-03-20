@@ -6,6 +6,9 @@ import { nextTick } from 'vue';
 import { ref } from 'vue';
 import axios from 'axios';
 import { onMounted } from 'vue';
+
+const messageSender = ref([]);
+
 defineProps({
   messages: Array,
   nameroom: String,
@@ -50,6 +53,7 @@ defineProps({
       :message="message"
       :isCurrentUser="message.idNguoiGui === user.id"
       />
+      
     </div>
     <!-- Footer -->
     <form>
@@ -59,13 +63,15 @@ defineProps({
         <i class="fas fa-sticky-note text-blue-600 text-2xl ml-4"> </i>
         <i class="fas fa-gift text-blue-600 text-2xl ml-4"> </i>
         <div class="flex-grow ml-4">
-          <input
+          <input v-model="messageSender"
             class="w-full p-2 border border-gray-300 rounded-full"
             placeholder="Aa"
             type="text"
           />
         </div>
-        <i class="fas fa-thumbs-up text-blue-600 text-2xl ml-4"> </i>
+
+        <i  v-if = "!messageSender" class="fas fa-thumbs-up text-blue-600 text-2xl ml-4"> </i>
+        <i v-else class="fas fa-paper-plane text-blue-600 text-2xl ml-4"></i>
       </div>
     </form>
   </div>
