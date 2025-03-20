@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 public class tinNhan {
     @Id
     private ObjectId id;
-    private String idNguoiGui; 
+    private ObjectId idNguoiGui; 
     private String noiDung;    
     private Date thoiGian;    
     private String idRoom;     

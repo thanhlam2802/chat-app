@@ -83,7 +83,6 @@
     import { useRouter } from 'vue-router';
     const errors = ref();
     const router = useRouter();
-
     const props = defineProps({
     user: Object,
     });

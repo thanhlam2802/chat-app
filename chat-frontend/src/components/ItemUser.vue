@@ -6,21 +6,22 @@ const props = defineProps({
   name: String,
   time: String,
   message: String,
-  size: Number 
+  size: Number ,
 });
 console.log("ooooooooooooooooo"+props.avatar);
 
 </script>
 
 <template>
-  <div class="flex relative items-center space-x-4 p-2 hover:bg-gray-100 rounded-lg cursor-pointer">
+    <div class="flex relative items-center space-x-4 p-2 hover:bg-gray-100 rounded-lg cursor-pointer">
     <Avatar :src="avatar" size="md" />
     <div class="flex-1">
       <div class="flex justify-between">
         <div>
-          <span class="font-bold mr-3">{{ name || 'Nguyen Minh Phuong' }}</span>
+          <span class="font-bold  mr-3">{{ name || 'Nguyen Minh Phuong' }}</span>
         </div>
-        <span class="text-gray-500 text-sm">{{ time || '31 tuần' }}</span>
+        <span class="text-gray-500 text-sm">  {{ new Date(time).toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit", hour12: false }) }}
+</span>
       </div>
       <p class="text-gray-500 truncate">{{ message.substring(0,25)+'...' || 'Nếu bạn k lấy nhá...' }}</p>
     </div>

@@ -3,7 +3,6 @@ package com.example.chat.chat_backend.Controller;
 import java.util.Base64;
 import java.util.List;
 import java.util.Map;
-
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,7 +13,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import com.example.chat.chat_backend.Bean.user;
 import com.example.chat.chat_backend.DTO.LoginDTO;
@@ -48,10 +49,16 @@ public class HellowordController {
 //    	ObjectId userId = new ObjectId("67ca664cdba853068a93a5df");
 //    	System.out.print((chatService.getUsersWithLatestMessage(userId)));
 //    	
+//<<<<<<< HEAD
+//
+//    	String pas= "53b62ee3f=MjMx4WY";
+
+
 //    	String pas= "2b97347a72UDN";
 //    	String endb=new String(Base64.getDecoder().decode(new StringBuilder(pas.substring(9, pas.length())).reverse().toString()));
 //    	System.out.println("đọc kiểu khang: "+endb);
     	
+
 //    	String random = UUID.randomUUID().toString().replace("-", "").substring(0, 9);
 //    	String base =new StringBuilder(Base64.getEncoder().encodeToString(pas.getBytes())+random).reverse().toString();
 //    	String bas2 =Base64.getEncoder().encodeToString(pas.getBytes());
@@ -105,6 +112,7 @@ public class HellowordController {
         	System.out.println("lkieems ban be ");
             ObjectId objectId = new ObjectId(userId);
             List<Map<String, Object>> friends = chatService.getUsersWithLatestMessage(objectId);
+        	System.out.println(friends);
              friends.forEach(m ->{
             	System.out.println("-------------------------");
             	System.out.println(m.get("user"));
@@ -116,6 +124,7 @@ public class HellowordController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Lỗi khi tìm bạn bè");
         }
     }
+
     @GetMapping("/listfriends/{userId}")
     public ResponseEntity<?> getListFr(@PathVariable String userId) {
         try {
@@ -147,6 +156,15 @@ public class HellowordController {
         	System.out.println(e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Lỗi khi tìm bạn bè: ");
         }
+    }
+    @GetMapping("/link-preview")
+    public Map<String, Object> getLinkPreview( @RequestParam String url ) {
+        String apiKey = "8391aa05cff581489bf6635ec23d6e24"; 
+        String apiUrl = "https://api.linkpreview.net/?key=" + apiKey + "&q=" + url;
+        
+        RestTemplate restTemplate = new RestTemplate();
+        return restTemplate.getForObject(apiUrl, Map.class);
+
     }
 
    

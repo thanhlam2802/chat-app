@@ -1,3 +1,4 @@
+
 <template>
   <div class="w-[25%] flex-col flex h-screen bg-white px-3">
     <div class="flex justify-between mb-4 p-4  w-full border-gray-300 border-dotted border-b-2">
@@ -41,6 +42,7 @@
       </div>
     </div>
   </div>
+
 </template>
   <script setup>
 import { defineEmits } from "vue";
