@@ -18,23 +18,6 @@ public interface roomDAO extends MongoRepository<room,ObjectId>{
 	@Query("{ 'members': { $in: [?0] } }")
 	List<room> findByMembersContainingAndTypeIsFalse(ObjectId userId);
 
-	@Aggregation(pipeline = {
-		    "{ '$match': { '$and': [ { 'members': { '$size': 2 } }, { 'members': { '$nin': [?0] } } ] } }",
-		    "{ '$unwind': '$members' }",
-		    "{ '$match': { 'members': { '$ne': ?0 } } }",
-		    "{ '$lookup': { " +
-		        " 'from': 'messages', " +
-		        " 'let': { 'userB': '$members' }, " +
-		        " 'pipeline': [ " +
-		            "{ '$match': { '$expr': { '$or': [ " +
-		                "{ '$and': [ { '$eq': ['$sender', ?0] }, { '$eq': ['$receiver', '$$userB'] } ] }, " +
-		                "{ '$and': [ { '$eq': ['$receiver', ?0] }, { '$eq': ['$sender', '$$userB'] } ] } " +
-		            "] } } } " +
-		        "], " +
-		        " 'as': 'chatHistory' " +
-		    "} }",
-		    "{ '$match': { 'chatHistory': { '$size': 0 } } }"
-		})
-		List<room> findUsersNeverChattedWith(ObjectId userId);
+
 
 }

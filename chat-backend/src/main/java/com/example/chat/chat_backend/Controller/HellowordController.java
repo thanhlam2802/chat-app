@@ -1,8 +1,8 @@
 package com.example.chat.chat_backend.Controller;
 
-import java.util.Base64;
 import java.util.List;
 import java.util.Map;
+
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,9 +17,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import com.example.chat.chat_backend.Bean.Friends;
 import com.example.chat.chat_backend.Bean.user;
 import com.example.chat.chat_backend.DTO.LoginDTO;
 import com.example.chat.chat_backend.Service.ChatService;
+import com.example.chat.chat_backend.Service.FriendsService;
 import com.example.chat.chat_backend.Service.SessionService;
 import com.example.chat.chat_backend.Service.roomService;
 import com.example.chat.chat_backend.Service.userService;
@@ -34,7 +36,7 @@ public class HellowordController {
 	@Autowired roomService utilroom;
 	@Autowired
     private ChatService chatService;
-
+	@Autowired FriendsService frSer;
 	@Autowired
 	SessionService ses;
 
@@ -149,7 +151,7 @@ public class HellowordController {
         try {
             ObjectId objectId = new ObjectId(userId);
             System.out.println(userId);
-            List<user> notfriends = utilUser.findOut(objectId);
+            List<Map<String,Object>> notfriends = utilUser.findOut(objectId);
             
             return ResponseEntity.ok(notfriends);
         } catch (Exception e) {
@@ -167,5 +169,24 @@ public class HellowordController {
 
     }
 
-   
+   @GetMapping("/addFriend/{id}")
+   public ResponseEntity<?> addFriend(@PathVariable ("id")String id) {
+	   user lg = ses.get("userLog");
+	   ObjectId objectId = new ObjectId(id);
+	   Friends fr = new Friends();
+	   fr.setGui(lg.getId());
+	   fr.setNhan(objectId);
+	   fr.setStatus(false);
+	   frSer.create(fr);
+       return ResponseEntity.ok(true);
+   }
+   @GetMapping("/accecpt/{id}")
+   public ResponseEntity<?> accecpt(@PathVariable ("id")String id) {
+	  
+	   ObjectId objectId = new ObjectId(id);
+	   Friends df = frSer.findById(objectId);
+	   df.setStatus(true);
+	   frSer.update(df);
+       return ResponseEntity.ok(true);
+   }
 }	

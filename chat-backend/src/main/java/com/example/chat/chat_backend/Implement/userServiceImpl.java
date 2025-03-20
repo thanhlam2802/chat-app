@@ -2,14 +2,18 @@ package com.example.chat.chat_backend.Implement;
 
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.chat.chat_backend.Bean.Friends;
 import com.example.chat.chat_backend.Bean.user;
+import com.example.chat.chat_backend.DAO.FriendsDAO;
 import com.example.chat.chat_backend.DAO.roomDAO;
 import com.example.chat.chat_backend.DAO.userDAO;
 import com.example.chat.chat_backend.DTO.LoginDTO;
@@ -19,6 +23,7 @@ import com.example.chat.chat_backend.Service.userService;
 public class userServiceImpl implements userService {
 	@Autowired userDAO dao;
 	@Autowired roomDAO rdao;
+	@Autowired FriendsDAO frDAO;
 	@Override
 	public user createuser(user r) {
 		return dao.save(r);
@@ -72,15 +77,47 @@ public class userServiceImpl implements userService {
 	}
 
 	@Override
-	public List<user> findOut(ObjectId id) {
-		List<user> ls = new ArrayList<user>();
-		System.out.println(rdao.findUsersNeverChattedWith(id).size());
-		rdao.findUsersNeverChattedWith(id).forEach(r ->{
-//		ls.add(r.getMembers().get(0));
-			Optional<user> u = dao.findById( r.getMembers().get(0));
-			ls.add(u.orElse(null));
+	public List<Map<String, Object>> findOut(ObjectId id) {
+		 List<Map<String,Object>> rs = new ArrayList<>();
+		List<user> all = dao.findAll();
+		List<user>fr = new ArrayList<user>();
+		List<Friends> frs = frDAO.findActiveFriends(id);
+		frs.forEach(f ->{
+			System.out.println("tìm bạn");
+			if(f.getGui().equals(id)) {
+				Optional<user> us = dao.findById(f.getNhan());
+				fr.add(us.orElse(null));
+				System.out.println("tìm đc bạn:"+us.orElse(null).getName());
+			}else {
+				Optional<user> us = dao.findById(f.getGui());
+				fr.add(us.orElse(null));
+				System.out.println("tìm đc bạn:"+us.orElse(null).getName());
+			}
 		});
-		return ls;
+		
+		for(user r :all) {
+			boolean checkFr= false;
+			if (r.getId().equals(id)) {
+				checkFr = true;
+				
+			}else {
+				for(user frr: fr) {
+					if (r.getId().equals(frr.getId())) {
+						checkFr = true;
+						break;
+					}
+				}
+			}
+			if (!checkFr) {
+				System.out.println("không phải là bạn: "+r.getName());
+				Map<String,Object> m = new HashMap<>();
+				m.put("user", r);
+				m.put("relationship", frDAO.findFriendship(id,r.getId()).orElse(null));
+				rs.add(m);
+		}
+		
 	}
-
+		return rs;
 }
+	
+	}

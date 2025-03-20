@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +11,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.example.chat.chat_backend.Bean.Friends;
 import com.example.chat.chat_backend.Bean.room;
 import com.example.chat.chat_backend.Bean.tinNhan;
 import com.example.chat.chat_backend.Bean.user;
+import com.example.chat.chat_backend.DAO.FriendsDAO;
 import com.example.chat.chat_backend.DAO.roomDAO;
 import com.example.chat.chat_backend.DAO.tinNhanDAO;
 import com.example.chat.chat_backend.DAO.userDAO;
@@ -26,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ChatServicrImpl implements ChatService{
 	 @Autowired
 	    private roomDAO roomRepository;
-
+	 	@Autowired FriendsDAO frDAO;
 	    @Autowired
 	    private tinNhanDAO tinNhanRepository;
 	    @Autowired userServiceImpl usImpl;
@@ -101,36 +102,27 @@ public class ChatServicrImpl implements ChatService{
 	    }
 		@Override
 		public List<Map<String, Object>> ListFriend(ObjectId userId) {
-			List<room> rooms = roomRepository.findByMembersContainingAndTypeIsFalse(userId);
+			
+			List<Friends> frs = frDAO.findActiveFriends(userId);
+			frs.forEach(f->{
+				System.out.println(f.toString());
+			});
 			List<Map<String, Object>> result = new ArrayList<>();
-			 for (room r : rooms) {
-		            if (r.getMembers().size() <= 1) {
-		                continue;
-		            }else if (r.getMembers().size() <=2) {
-		            	ObjectId otherUserId = r.getMembers().stream()
-	     	                .filter(id -> !id.equals(userId))
-	     	                .findFirst()
-	     	                .orElse(null);
-
-	     	            if (otherUserId == null) {
-	     	                log.warn("⚠ Không tìm thấy user còn lại trong phòng!");
-	     	                continue;
-	     	            }
-	     	            user OtherUser = userRepository.findById(otherUserId).orElse(null);
-
-	     	            if (OtherUser != null) {
-	     	                Map<String, Object> data = new HashMap<>();
-	     	                data.put("user", OtherUser);
-	     	                data.put("mutualFr",usImpl.getBanChung(userId, otherUserId));
-
-	     	                result.add(data);
-	     	            } else {
-	     	                log.warn("⚠ Không tìm thấy thông tin user từ database!");
-	     	            }
-		            }else  if (r.getMembers().size() >2){
-	     	           continue;
-		            }
-		        }
+			for(Friends fr: frs) {
+				 Map<String, Object> data = new HashMap<>();
+				 if (fr.getGui().equals(userId)) {
+					 data.put("user", userRepository.findById(fr.getNhan()));
+					 data.put("mutualFr", 0);
+//					   data.put("mutualFr",usImpl.getBanChung(userId, otherUserId));
+				 }else {
+					 data.put("user", userRepository.findById(fr.getGui()));
+					 data.put("mutualFr", 0);
+//					   data.put("mutualFr",usImpl.getBanChung(userId, otherUserId));
+				 }
+				 result.add(data);
+			}
+			
+		
 		        return result;
 		}
 }
