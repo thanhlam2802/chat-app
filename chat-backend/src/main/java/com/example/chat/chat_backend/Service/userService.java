@@ -15,4 +15,6 @@ public interface userService {
 	List<user> findAll();
 	Boolean checkLogin (LoginDTO lg);
 	user findByName(String name);
+	int getBanChung(ObjectId idUser1, ObjectId idUser2);
+	List<user> findOut(ObjectId id);
 }

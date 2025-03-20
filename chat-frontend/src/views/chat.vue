@@ -4,7 +4,7 @@ import Sidebar from '../views/Sidebar.vue';
 import Content from '../views/Content.vue';
 import controlFriend from "../components/controlFriend.vue";
 import viewFriend from "../components/viewFriend.vue";
-
+import viewNotFriend from "../components/viewNotFriend.vue";
 const props = defineProps({
   user: Object,
 });
@@ -49,6 +49,13 @@ const changeComponent = (content, sidebar) => {
   ContentCPN.value = content;
   SidebarCPN.value = sidebar;
 };
+const updateContent = (newContent) =>{
+    if (newContent =='viewNotFriend'){
+      ContentCPN.value = viewNotFriend;
+    }else  if (newContent =='viewFriend'){
+      ContentCPN.value = viewFriend;
+    }
+  }
 </script>
 
 <template>
@@ -102,8 +109,14 @@ const changeComponent = (content, sidebar) => {
       </div>
     </div>
 
+
+
+
+
+
+
     <!-- Sidebar động -->
-    <component :is="SidebarCPN" :user="user" @clickStatus="handleClickStatus" @messages-fetched="handleMessagesFetched" />
+    <component :is="SidebarCPN" :user="user" @clickStatus="handleClickStatus" @messages-fetched="handleMessagesFetched" @updateContent="updateContent"/>
 
     <!-- Content động -->
     <component 
@@ -116,3 +129,4 @@ const changeComponent = (content, sidebar) => {
     />
   </div>
 </template>
+
