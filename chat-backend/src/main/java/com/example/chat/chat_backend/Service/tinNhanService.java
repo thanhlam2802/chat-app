@@ -13,4 +13,5 @@ public interface tinNhanService {
 	tinNhan findById(ObjectId id);
 	List<tinNhan> findAll();
 	List<TinNhanDTO> getMessagesByRoom(ObjectId roomId);
+	tinNhan create(tinNhan message);
 }
