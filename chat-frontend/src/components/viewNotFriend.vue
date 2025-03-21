@@ -1,20 +1,26 @@
 <template>
   <div class="w-[75%] border-b border-gray-200 p-5">
     <div class="grid grid-cols-3 gap-4">
-      <div v-for="us in users" :key="us.id" class="bg-gray-900 text-white p-4 rounded-lg shadow-md">
+      <div v-for="map in users" :key="map.user.id" class="bg-gray-900 text-white p-4 rounded-lg shadow-md">
         <div class="flex items-center justify-between">
           <div class="flex items-center space-x-3">
-            <img class="w-12 h-12 rounded-full border-2 border-red-500" :src="`/images/${us.avt}`" alt="Avatar" />
+            <img class="w-12 h-12 rounded-full border-2 border-red-500" :src="`/images/${map.user.avt}`" alt="Avatar" />
             <div>
-              <p class="font-semibold">{{ us.name }}</p>
+              <p class="font-semibold">{{ map.user.name }}</p>
               <p class="text-gray-400 text-sm">Người lạ</p>
             </div>
           </div>
           <i class="fa-solid fa-comments text-gray-400"></i>
         </div>
-        <button class="mt-3 w-full bg-gray-700 text-white py-2 rounded-lg hover:bg-gray-600 transition">
+
+        <a v-if="map.relationship == null" class="mt-3 block text-center w-full bg-gray-700 text-white py-2 rounded-lg hover:bg-gray-600 transition" @click="adfriend(map.user.id)"> 
           Kết bạn
-        </button>
+        </a>
+        <p v-else-if="map.relationship.status == false && map.relationship.gui == user.id" class="mt-3 block text-center w-full bg-gray-700 text-white py-2 rounded-lg hover:bg-gray-600 transition" > Đang chờ 
+          kết bạn
+        </p>
+        <p @click="accecpt(map.relationship.id)" v-else-if="map.relationship.status == false && map.relationship.nhan == user.id" class="mt-3 block text-center w-full bg-gray-700 text-white py-2 rounded-lg hover:bg-gray-600 transition" > Chấp nhận
+        </p>
       </div>
     </div>
   </div>
@@ -62,6 +68,25 @@ export default {
         console.error("Lỗi khi lấy danh sách không bạn bè:", error);
       }
     },
+    adfriend (id){
+      console.log("lấy id"+id);
+      
+      fetch(`http://localhost:8080/api/addFriend/${id}`, {
+        method: "GET",
+        credentials: "include",
+      });
+      alert("Đã gửi lời mời !")
+      window.location.href = 'http://localhost:5173/chat';
+    },
+    accecpt(id){
+      fetch(`http://localhost:8080/api/accecpt/${id}`, {
+        method: "GET",
+        credentials: "include",
+      });
+      alert("Đã kết bạn !")
+      window.location.href = 'http://localhost:5173/chat';
+     
+    }
   },
 };
 </script>

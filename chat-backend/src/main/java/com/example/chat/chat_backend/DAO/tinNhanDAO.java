@@ -16,5 +16,4 @@ public interface tinNhanDAO  extends MongoRepository<tinNhan, ObjectId>{
     
     @Query(value = "{ 'idRoom': ?0 }", sort = "{ 'thoiGian': -1 }")
     List<tinNhan> findByIdRoomOrderByThoiGianDesc(ObjectId idRoom);
-    
 }

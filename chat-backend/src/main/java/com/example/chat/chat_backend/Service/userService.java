@@ -1,6 +1,7 @@
 package com.example.chat.chat_backend.Service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.bson.types.ObjectId;
 
@@ -16,5 +17,5 @@ public interface userService {
 	Boolean checkLogin (LoginDTO lg);
 	user findByName(String name);
 	int getBanChung(ObjectId idUser1, ObjectId idUser2);
-	List<user> findOut(ObjectId id);
+	List<Map<String, Object>>  findOut(ObjectId id);
 }
