@@ -14,13 +14,13 @@ ChatApp là một ứng dụng chat real-time được xây dựng bằng **Spri
 ## Công nghệ sử dụng
 - **Frontend**: Vue.js, Vuex, Tailwind CSS
 - **Backend**: Spring Boot, WebSocket, JWT, MongoDB
-- **Realtime**: WebSocket, STOMP
-- **Lưu trữ file**: AWS S3 / Firebase Storage
-- **Triển khai**: Docker, AWS
+- **Realtime**: WebSocket
+- **Lưu trữ file**:  Firebase Storage
+- **Triển khai**: Docker
 
 ## Hướng dẫn cài đặt
 ### Yêu cầu
-- Java 17+
+- Java 21+
 - Node.js 18+
 - MongoDB 6+
 - Maven
