@@ -63,5 +63,5 @@ npm run dev
 
 🧑‍💻 Võ Lê Thanh Lâm
 
-🧑‍💻 Phan Huỳnh Phúc Khang
+🧑‍💻 Phan Huỳnh Phúc Khang (khang đẹp trai)
 
