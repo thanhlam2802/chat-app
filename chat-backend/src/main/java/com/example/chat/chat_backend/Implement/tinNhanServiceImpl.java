@@ -1,5 +1,6 @@
 package com.example.chat.chat_backend.Implement;
 
+import java.util.Date;
 import java.util.List;
 
 import org.bson.types.ObjectId;
@@ -75,6 +76,15 @@ public class tinNhanServiceImpl implements tinNhanService{
 	public List<tinNhan> findAll() {
 		 
 		return dao.findAll();
+	}
+
+	@Override
+	public tinNhan create(tinNhan message) {
+		// TODO Auto-generated method stub
+		if (message.getThoiGian() == null) {
+	        message.setThoiGian(new Date());
+	    }
+		return dao.save(message);
 	}
 
 
